@@ -108,26 +108,26 @@ export const FINISHES = [
 // ─── Content: testimonials ────────────────────────────────────────────────────
 export const TESTIMONIALS = [
   {
-    quote:  '"Cuando abrí la caja y vi el busto de Canela... me quebré. Es idéntica. Los ojos, las orejas, hasta la pequeña mancha que tenía en la nariz. Gracias."',
+    quote:  '"Cuando abrí la caja y vi el busto de Lola... me quebré. Es idéntica. Las orejas paradas, su expresión exacta. Está en la sala y la miro todos los días. Gracias."',
     author: 'María C.',
     city:   'Bogotá',
-    detail: 'Busto 3D mármol · Canela',
+    detail: 'Busto 3D mármol · Lola',
     rating: '5',
     date:   '2025-09-15',
   },
   {
-    quote:  '"Lo pedí de regalo para mi pareja. Cuando vio el busto 3D de Thor en bronce no podía creerlo. Literalmente lloró. Es el regalo más especial que le he dado."',
+    quote:  '"Lo pedí de regalo para mi pareja. Cuando vio el busto 3D de Verde no podía creerlo. Literalmente lloró. Capturaron su mirada perfectamente. Es el regalo más especial que le he dado."',
     author: 'Andrés M.',
     city:   'Medellín',
-    detail: 'Busto 3D bronce · Thor',
+    detail: 'Busto 3D bronce · Verde',
     rating: '5',
     date:   '2025-10-22',
   },
   {
-    quote:  '"El acabado mármol quedó espectacular. Está en la sala y todos los que llegan preguntan dónde compramos ese busto 3D. La atención fue increíble desde el primer mensaje."',
+    quote:  '"El policromado de Morfeo quedó espectacular, hasta la lengua. Todos los que llegan a casa preguntan dónde lo compramos. La atención fue increíble desde el primer mensaje."',
     author: 'Valentina R.',
     city:   'Cali',
-    detail: 'Busto 3D mármol · Mochi',
+    detail: 'Busto 3D policromado · Morfeo',
     rating: '5',
     date:   '2025-11-08',
   },
