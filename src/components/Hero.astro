@@ -1,0 +1,136 @@
+---
+import { SITE, WA } from '../lib/site.ts';
+import ParticlesBackground from './ParticlesBackground.astro';
+---
+
+<section id="hero" class="relative min-h-[100vh] flex items-center justify-center px-6 overflow-hidden">
+  <!-- Layer 0: Deep background radial (slowest parallax) -->
+  <div
+    class="absolute inset-0 z-0"
+    data-parallax="0.35"
+    style="background: radial-gradient(ellipse 80% 60% at 50% 35%, rgba(91,33,182,.22) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 80% 20%, rgba(236,72,153,.1) 0%, transparent 60%);"
+  ></div>
+
+  <!-- Layer 1: Particles (mid parallax) -->
+  <div class="absolute inset-0 z-0" data-parallax="0.18">
+    <ParticlesBackground />
+  </div>
+
+  <!-- Layer 2: Content — two-column on desktop, centered on mobile -->
+  <div class="relative z-10 w-full max-w-6xl mx-auto pt-20 px-0" data-parallax="-0.06">
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+
+      <!-- Text column -->
+      <div class="flex-1 text-center lg:text-left">
+        <span class="inline-flex items-center gap-2 text-purple-300 uppercase tracking-[0.35em] text-[0.6875rem] font-semibold mb-8 bg-purple-500/10 border border-purple-500/20 rounded-full px-4 py-1.5 animate-fade-in">
+          Bustos impresos en 3D · Bogotá, Colombia
+        </span>
+
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 leading-[1.05] font-serif animate-fade-in" style="animation-delay: 0.15s;">
+          {SITE.tagline}
+        </h1>
+
+        <p class="text-lg md:text-xl text-white/55 max-w-xl mb-14 font-light leading-relaxed animate-fade-in mx-auto lg:mx-0" style="animation-delay: 0.3s;">
+          Imprimimos en 3D el rostro de tu mascota con precisión milimétrica,
+          pintado a mano por nuestros artistas en Bogotá. Una pieza única que dura para siempre.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center animate-fade-in" style="animation-delay: 0.45s;">
+          <a href={WA.memorial} target="_blank" rel="noopener noreferrer" class="btn-primary">
+            Inmortalizar su recuerdo
+          </a>
+          <a href="#acabados" class="btn-secondary">
+            <span>Explorar acabados</span>
+            <span aria-hidden="true">&#8594;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero product image -->
+      <div class="flex-shrink-0 w-full lg:w-auto animate-fade-in hero-img-wrap" style="animation-delay: 0.55s;">
+        <div class="hero-product-frame">
+          <img
+            src="/images/productos/busto-3d-policromado-pitbull-morfeo-bogota.jpeg"
+            alt="Busto impreso en 3D de perro Pitbull con acabado policromado pintado a mano — Huella Eterna Bogotá"
+            width="420"
+            height="520"
+            loading="eager"
+            decoding="async"
+            class="hero-product-img"
+          />
+          <!-- Floating label -->
+          <div class="hero-img-badge">
+            <span class="text-xs font-semibold text-white/90">Morfeo · Pitbull</span>
+            <span class="text-[0.6rem] text-purple-300 block mt-0.5">Acabado policromado a mano</span>
+          </div>
+          <!-- Glow behind image -->
+          <div class="hero-img-glow" aria-hidden="true"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom gradient fade -->
+  <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#1A0A2E] to-transparent z-10 pointer-events-none"></div>
+</section>
+
+<style>
+  .hero-img-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-product-frame {
+    position: relative;
+    width: 340px;
+    max-width: 90vw;
+  }
+
+  .hero-product-img {
+    width: 100%;
+    height: auto;
+    border-radius: 1.5rem;
+    object-fit: cover;
+    object-position: center top;
+    box-shadow:
+      0 0 0 1px rgba(168, 85, 247, .18),
+      0 24px 64px rgba(0, 0, 0, .55),
+      0 8px 32px rgba(168, 85, 247, .2);
+    display: block;
+    aspect-ratio: 3/4;
+  }
+
+  .hero-img-badge {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26, 10, 46, .82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(168, 85, 247, .25);
+    border-radius: 50px;
+    padding: 7px 16px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .hero-img-glow {
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center,
+      rgba(168, 85, 247, .18) 0%,
+      rgba(236, 72, 153, .10) 45%,
+      transparent 70%
+    );
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(20px);
+  }
+
+  @media (min-width: 1024px) {
+    .hero-product-frame { width: 380px; }
+  }
+</style>

@@ -1,0 +1,95 @@
+---
+import { STORY_CARDS, WA } from '@/lib/site';
+---
+<section id="story" aria-labelledby="story-heading">
+  <div class="section-inner">
+    <div class="story-header">
+      <p class="section-tag">Nuestra historia</p>
+      <h2 id="story-heading" class="section-title reveal reveal-delay-1">
+        Hay amores que no caben<br>
+        <span class="text-gradient">en una sola foto</span>
+      </h2>
+      <p class="section-sub section-sub--center reveal reveal-delay-2">
+        Tu mascota te enseñó a amar sin condiciones. Nosotros te ayudamos
+        a que ese amor ocupe un lugar de honor en tu hogar, para siempre.
+      </p>
+    </div>
+
+    <div class="story-grid" role="list">
+      {STORY_CARDS.map((card, i) => (
+        <article class={`glass-card story-card reveal reveal-delay-${i + 1}`} role="listitem">
+          <span class="story-emoji" aria-hidden="true">{card.emoji}</span>
+          <h3>{card.title}</h3>
+          <p>{card.body}</p>
+          <a
+            href={WA[card.waKey]}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="story-link"
+            aria-label={`${card.title} — Cotizar por WhatsApp`}
+          >
+            Quiero esto <span aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  #story { padding: 6.25rem 0; }
+
+  .story-header {
+    text-align: center;
+    margin-bottom: 3.75rem;
+  }
+
+  .story-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .story-card { padding: 2.25rem 1.75rem; }
+
+  .story-emoji {
+    font-size: 3rem;
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+
+  .story-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3125rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: .875rem;
+    color: #fff;
+  }
+
+  .story-card p {
+    font-size: .9375rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, .58);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+
+  .story-link {
+    font-size: .875rem;
+    font-weight: 700;
+    color: #C084FC;
+    text-decoration: none;
+    transition: color .2s;
+  }
+
+  .story-link:hover { color: #E879F9; }
+
+  @media (max-width: 768px) {
+    .story-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .story-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>

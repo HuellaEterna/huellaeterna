@@ -1,0 +1,85 @@
+---
+import { SITE, WA } from '@/lib/site';
+---
+<header>
+  <nav id="site-nav" aria-label="Navegación principal">
+    <a href="/" class="nav-logo" aria-label={SITE.name}>
+      <!-- SVG paw logo placeholder -->
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+        <circle cx="19" cy="19" r="19" fill="url(#navGrad)" opacity=".9"/>
+        <text x="19" y="25" text-anchor="middle" font-size="18" fill="white">🐾</text>
+        <defs>
+          <linearGradient id="navGrad" x1="0" y1="0" x2="38" y2="38">
+            <stop offset="0%"   stop-color="#A855F7"/>
+            <stop offset="100%" stop-color="#EC4899"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="nav-brand">{SITE.name}</span>
+    </a>
+
+    <a href={WA.default} target="_blank" rel="noopener noreferrer" class="nav-cta">
+      Cotizar ahora
+    </a>
+  </nav>
+</header>
+
+<style>
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(26, 10, 46, .75);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+    transition: transform .3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-brand {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1875rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  .nav-cta {
+    background: linear-gradient(135deg, #A855F7, #EC4899);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 9px 22px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+    font-size: .875rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    box-shadow: 0 3px 14px rgba(168, 85, 247, .35);
+    transition: transform .2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow .2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-cta:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 6px 22px rgba(168, 85, 247, .55);
+  }
+
+  @media (max-width: 480px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-brand { font-size: 1.0625rem; }
+  }
+</style>

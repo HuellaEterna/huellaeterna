@@ -1,0 +1,180 @@
+---
+import { WA } from '../lib/site';
+
+const PHOTOS = [
+  {
+    src:   '/images/productos/busto-3d-policromado-pitbull-morfeo-bogota.jpeg',
+    alt:   'Busto 3D policromado pintado a mano de Pitbull — Huella Eterna Bogotá',
+    name:  'Morfeo',
+    breed: 'Pitbull · Policromado',
+    span:  'tall',
+  },
+  {
+    src:   '/images/productos/busto-3d-marmol-scottish-terrier-lola-colombia.jpeg',
+    alt:   'Busto 3D acabado mármol de Scottish Terrier — Huella Eterna Colombia',
+    name:  'Lola',
+    breed: 'Scottish Terrier · Mármol',
+    span:  'normal',
+  },
+  {
+    src:   '/images/productos/busto-3d-policromado-gato-dushi-colombia.jpeg',
+    alt:   'Busto 3D policromado de gato atigrado pintado a mano — Huella Eterna',
+    name:  'Dushi',
+    breed: 'Gato · Policromado',
+    span:  'normal',
+  },
+  {
+    src:   '/images/productos/busto-3d-bronce-labrador-verde-bogota.jpeg',
+    alt:   'Busto 3D acabado bronce de Labrador Retriever — Huella Eterna Bogotá',
+    name:  'Verde',
+    breed: 'Labrador · Bronce',
+    span:  'normal',
+  },
+  {
+    src:   '/images/productos/busto-3d-policromado-chihuahua-lucky-bogota.jpeg',
+    alt:   'Busto 3D policromado de Chihuahua con hoodie azul — Huella Eterna Bogotá',
+    name:  'Lucky',
+    breed: 'Chihuahua · Policromado',
+    span:  'tall',
+  },
+] as const;
+---
+
+<section class="py-28 px-6 relative z-10" id="galeria">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="section-tag reveal-up">Galería</p>
+      <h2 class="text-4xl md:text-5xl font-bold mb-4 font-serif reveal-up delay-1">
+        Cada pieza, <span class="text-gradient">única e irrepetible</span>
+      </h2>
+      <p class="text-white/50 max-w-lg mx-auto reveal-up delay-2">
+        Bustos impresos en 3D y pintados a mano en Bogotá. Cada uno captura
+        la esencia exacta de tu mascota.
+      </p>
+    </div>
+
+    <!-- Masonry grid -->
+    <div class="gallery-grid">
+      {PHOTOS.map((photo, i) => (
+        <div
+          class={`gallery-item ${photo.span === 'tall' ? 'gallery-item--tall' : ''} reveal-scale delay-${Math.min(i + 1, 4)}`}
+          itemscope
+          itemtype="https://schema.org/ImageObject"
+        >
+          <meta itemprop="name" content={photo.alt} />
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            loading="lazy"
+            decoding="async"
+            class="gallery-img"
+            itemprop="contentUrl"
+          />
+          <div class="gallery-overlay">
+            <p class="gallery-name">{photo.name}</p>
+            <p class="gallery-breed">{photo.breed}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- CTA below gallery -->
+    <div class="text-center mt-14 reveal-up">
+      <p class="text-white/45 text-sm mb-6">¿Quieres el tuyo? Empieza con solo 3 fotos.</p>
+      <a
+        href={WA.default}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+      >
+        Quiero mi busto 3D personalizado
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (min-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    cursor: pointer;
+    background: rgba(45, 16, 87, .4);
+  }
+
+  .gallery-item--tall {
+    grid-row: span 2;
+  }
+
+  .gallery-img {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .gallery-item--tall .gallery-img {
+    min-height: 460px;
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 32px 18px 18px;
+    background: linear-gradient(to top, rgba(26, 10, 46, .88) 0%, transparent 100%);
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .gallery-item:hover .gallery-overlay {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .gallery-item:hover .gallery-img {
+    transform: scale(1.06);
+  }
+
+  .gallery-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .gallery-breed {
+    font-size: 0.75rem;
+    color: rgba(192, 132, 252, 0.9);
+    margin-top: 3px;
+  }
+
+  /* Always show overlay on touch devices */
+  @media (hover: none) {
+    .gallery-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

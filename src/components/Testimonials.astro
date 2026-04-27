@@ -1,0 +1,126 @@
+---
+import { TESTIMONIALS } from '@/lib/site';
+---
+<section id="testimony" aria-labelledby="testimony-heading">
+  <div class="section-inner">
+    <div class="testimony-header">
+      <p class="section-tag">Testimonios</p>
+      <h2 id="testimony-heading" class="section-title reveal reveal-delay-1">
+        Clientes que ya tienen <span class="text-gradient">la escultura</span><br>
+        de su mascota
+      </h2>
+    </div>
+
+    <div class="testimony-grid" role="list">
+      {TESTIMONIALS.map((t, i) => (
+        <figure
+          class={`glass-card testimony-card reveal reveal-delay-${i + 1}`}
+          role="listitem"
+          itemscope
+          itemtype="https://schema.org/Review"
+        >
+          {/* Hidden schema fields */}
+          <meta itemprop="datePublished" content={t.date} />
+          <div itemprop="itemReviewed" itemscope itemtype="https://schema.org/LocalBusiness" style="display:none">
+            <meta itemprop="name" content="Huella Eterna" />
+          </div>
+          <div itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating" style="display:none">
+            <meta itemprop="ratingValue" content={t.rating} />
+            <meta itemprop="bestRating"  content="5" />
+          </div>
+
+          <div class="stars" aria-label={`${t.rating} estrellas`} role="img">
+            <span aria-hidden="true">★★★★★</span>
+          </div>
+
+          <blockquote itemprop="reviewBody">
+            <p>{t.quote}</p>
+          </blockquote>
+
+          <figcaption class="testimony-author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <div class="author-avatar" aria-hidden="true">
+              {t.author.charAt(0)}
+            </div>
+            <div>
+              <strong itemprop="name">{t.author}</strong>
+              <span>{t.city} · {t.detail}</span>
+            </div>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  #testimony { padding: 6.25rem 0; }
+
+  .testimony-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .testimony-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .testimony-card { padding: 2rem 1.75rem; }
+
+  .stars {
+    color: #FBBF24;
+    font-size: 1.125rem;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+  }
+
+  blockquote p {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.0625rem;
+    font-style: italic;
+    color: rgba(255, 255, 255, .9);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+  }
+
+  .testimony-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #A855F7, #EC4899);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .testimony-author strong {
+    display: block;
+    font-size: .9375rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .testimony-author span {
+    font-size: .8125rem;
+    color: rgba(255, 255, 255, .5);
+  }
+
+  @media (max-width: 768px) {
+    .testimony-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .testimony-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>

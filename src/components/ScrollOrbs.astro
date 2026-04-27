@@ -1,0 +1,88 @@
+---
+// Orbes de luz parallax — se mueven a diferentes velocidades en el fondo
+---
+
+<!-- 5 orbes posicionados a lo largo de la pagina a distintas profundidades -->
+<div aria-hidden="true" id="orb-layer">
+  <!-- Orb 1: purple grande, top-left, deriva lento hacia abajo -->
+  <div class="scroll-orb" data-orb-speed="0.10"
+    style="top:5vh; left:-8%; width:580px; height:580px;
+           background:radial-gradient(circle, rgba(91,33,182,.22) 0%, transparent 70%);">
+  </div>
+
+  <!-- Orb 2: pink, top-right, deriva hacia arriba (contra-parallax) -->
+  <div class="scroll-orb" data-orb-speed="-0.14"
+    style="top:15vh; right:-10%; width:500px; height:500px;
+           background:radial-gradient(circle, rgba(236,72,153,.16) 0%, transparent 70%);">
+  </div>
+
+  <!-- Orb 3: violet, mid-left, deriva rapido hacia abajo -->
+  <div class="scroll-orb" data-orb-speed="0.22"
+    style="top:45vh; left:5%; width:420px; height:420px;
+           background:radial-gradient(circle, rgba(139,92,246,.14) 0%, transparent 70%);">
+  </div>
+
+  <!-- Orb 4: purple-pink, mid-right, deriva leve hacia arriba -->
+  <div class="scroll-orb" data-orb-speed="-0.08"
+    style="top:65vh; right:5%; width:460px; height:460px;
+           background:radial-gradient(circle, rgba(168,85,247,.13) 0%, transparent 70%);">
+  </div>
+
+  <!-- Orb 5: pink, bottom-center, deriva hacia abajo -->
+  <div class="scroll-orb" data-orb-speed="0.17"
+    style="top:88vh; left:30%; width:380px; height:380px;
+           background:radial-gradient(circle, rgba(236,72,153,.14) 0%, transparent 70%);">
+  </div>
+</div>
+
+<style>
+  #orb-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .scroll-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(72px);
+    will-change: transform;
+    /* No transition aqui — el JS anima directamente via rAF */
+  }
+
+  /* En movil se quitan para no afectar rendimiento de scroll tacil */
+  @media (max-width: 768px) {
+    .scroll-orb { filter: blur(50px); opacity: 0.7; }
+  }
+</style>
+
+<script>
+  (function () {
+    const orbs = document.querySelectorAll<HTMLElement>('.scroll-orb');
+    if (!orbs.length) return;
+
+    // Deshabilitar animacion JS en movil (solo CSS estatico)
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) return;
+
+    let ticking = false;
+
+    function updateOrbs() {
+      const scrollY = window.scrollY;
+      orbs.forEach((orb) => {
+        const speed = parseFloat(orb.dataset.orbSpeed || '0');
+        orb.style.transform = `translate3d(0, ${(scrollY * speed).toFixed(2)}px, 0)`;
+      });
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateOrbs);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+</script>

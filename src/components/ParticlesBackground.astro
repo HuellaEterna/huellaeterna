@@ -1,0 +1,91 @@
+---
+// Particulas sutiles en canvas puro — sin librerias externas
+---
+
+<canvas id="particles-canvas" class="absolute inset-0 z-0 opacity-50" style="pointer-events:none;"></canvas>
+
+<script>
+  function startParticles() {
+    const canvas = document.getElementById("particles-canvas") as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const section = canvas.parentElement!;
+    let animId: number;
+
+    function resize() {
+      canvas.width  = section.offsetWidth;
+      canvas.height = section.offsetHeight;
+    }
+
+    type Particle = {
+      x: number; y: number;
+      vx: number; vy: number;
+      r: number; alpha: number; dalpha: number;
+      color: string;
+    };
+
+    const TOTAL = 60;
+    // Mezcla de particulas purpura y rosa
+    const COLORS = [
+      "168,85,247",   // #A855F7 purple
+      "192,132,252",  // #C084FC light purple
+      "236,72,153",   // #EC4899 pink
+      "139,92,246",   // #8B5CF6 violet
+    ];
+    const particles: Particle[] = [];
+
+    function spawn(): Particle {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: 0.6 + Math.random() * 1.6,
+        alpha: 0.08 + Math.random() * 0.22,
+        dalpha: (Math.random() > 0.5 ? 1 : -1) * 0.002,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      };
+    }
+
+    resize();
+    for (let i = 0; i < TOTAL; i++) particles.push(spawn());
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha += p.dalpha;
+
+        if (p.x < 0)            { p.x = 0;            p.vx *= -1; }
+        if (p.x > canvas.width) { p.x = canvas.width; p.vx *= -1; }
+        if (p.y < 0)            { p.y = 0;            p.vy *= -1; }
+        if (p.y > canvas.height){ p.y = canvas.height; p.vy *= -1; }
+
+        if (p.alpha > 0.3 || p.alpha < 0.04) p.dalpha *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color},${p.alpha.toFixed(3)})`;
+        ctx.fill();
+      }
+      animId = requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(section);
+
+    document.addEventListener("astro:before-swap", () => {
+      cancelAnimationFrame(animId);
+      ro.disconnect();
+    }, { once: true });
+  }
+
+  startParticles();
+  document.addEventListener("astro:after-swap", startParticles);
+</script>

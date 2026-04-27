@@ -1,0 +1,75 @@
+---
+import { WA } from '@/lib/site';
+---
+<section id="cta-final" aria-labelledby="cta-heading">
+  <div class="cta-inner">
+    <h2 id="cta-heading" class="cta-title reveal">
+      Pide tu escultura artesanal<br>
+      <span class="text-gradient">y la creamos para ti</span>
+    </h2>
+
+    <p class="cta-sub reveal reveal-delay-1">
+      Un mensaje por WhatsApp es todo lo que necesitas para empezar tu busto personalizado.
+      Te respondemos en minutos con todos los detalles.
+    </p>
+
+    <div class="cta-btns reveal reveal-delay-2">
+      <a
+        href={WA.quote}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+        aria-label="Cotizar mi escultura por WhatsApp"
+      >
+        <span aria-hidden="true">💬</span>
+        Cotizar mi escultura
+      </a>
+    </div>
+
+    <p class="cta-trust reveal reveal-delay-3">
+      <span aria-hidden="true">🔒</span>
+      Envías las fotos de forma privada y segura. Tu pedido está en buenas manos.
+    </p>
+  </div>
+</section>
+
+<style>
+  #cta-final {
+    padding: 6.25rem 1.5rem;
+    text-align: center;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(91, 33, 182, .35) 0%, transparent 70%);
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-inner { max-width: 680px; margin: 0 auto; }
+
+  .cta-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+    color: #fff;
+  }
+
+  .cta-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, .7);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .cta-btns { margin-bottom: 1.5rem; }
+
+  .cta-trust {
+    font-size: .8125rem;
+    color: rgba(255, 255, 255, .35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+</style>

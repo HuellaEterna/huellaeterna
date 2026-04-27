@@ -1,0 +1,192 @@
+---
+import { FINISHES, WA } from '@/lib/site';
+---
+<section id="finishes" aria-labelledby="finishes-heading">
+  <div class="section-inner">
+    <div class="finishes-header">
+      <p class="section-tag">Acabados</p>
+      <h2 id="finishes-heading" class="section-title reveal reveal-delay-1">
+        Cada busto es <span class="text-gradient">tan único</span><br>
+        como tu mascota
+      </h2>
+      <p class="section-sub section-sub--center reveal reveal-delay-2">
+        Elige el acabado que mejor capture su esencia. Todos impresos en 3D
+        y pintados a mano por nuestros artesanos.
+      </p>
+    </div>
+
+    <div class="finishes-grid">
+      {FINISHES.map((finish, i) => (
+        <article
+          class={`finish-card glass-card reveal reveal-delay-${i + 1}${finish.highlight ? ' finish-card--highlight' : ''}`}
+          aria-label={`${finish.name} — ${finish.price} ${finish.currency}`}
+          itemscope
+          itemtype="https://schema.org/Product"
+        >
+          {/* Hidden offers schema */}
+          <div itemprop="offers" itemscope itemtype="https://schema.org/Offer" style="display:none">
+            <meta itemprop="price"         content={finish.priceNum} />
+            <meta itemprop="priceCurrency" content={finish.currency} />
+            <meta itemprop="availability"  content="https://schema.org/InStock" />
+          </div>
+
+          {finish.highlight && (
+            <div class="finish-badge" aria-label="Más popular">El más elegido</div>
+          )}
+
+          <p class="finish-subtitle">{finish.subtitle}</p>
+          <h3 class="finish-name" itemprop="name">{finish.name}</h3>
+
+          <div class="finish-price" aria-label={`Precio: ${finish.price} ${finish.currency}`}>
+            <span class="finish-price-amount">{finish.price}</span>
+            <span class="finish-price-currency">{finish.currency}</span>
+          </div>
+
+          <p class="finish-desc" itemprop="description">{finish.description}</p>
+
+          <ul class="finish-features" aria-label="Características incluidas">
+            {finish.features.map(feat => (
+              <li>
+                <span class="feat-check" aria-hidden="true">✓</span>
+                {feat}
+              </li>
+            ))}
+          </ul>
+
+          <a
+            href={WA[finish.waKey]}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={finish.highlight ? 'btn-primary finish-btn' : 'btn-secondary finish-btn'}
+            aria-label={`Cotizar ${finish.name} por WhatsApp`}
+          >
+            <span aria-hidden="true">💬</span>
+            Quiero este acabado
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  #finishes { padding: 6.25rem 0; }
+
+  .finishes-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .finishes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .finish-card {
+    padding: 2.5rem 2rem;
+    position: relative;
+    text-align: center;
+  }
+
+  .finish-card--highlight {
+    border-color: rgba(168, 85, 247, .5);
+    background: linear-gradient(145deg, rgba(91, 33, 182, .4), rgba(45, 16, 87, .9));
+  }
+
+  .finish-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #A855F7, #EC4899);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 4px 18px;
+    border-radius: 50px;
+    white-space: nowrap;
+  }
+
+  .finish-subtitle {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #C084FC;
+    margin-bottom: .5rem;
+  }
+
+  .finish-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.75rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+
+  .finish-price {
+    margin-bottom: 1rem;
+  }
+
+  .finish-price-amount {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    color: #fff;
+  }
+
+  .finish-price-currency {
+    font-size: .875rem;
+    color: rgba(255, 255, 255, .5);
+    margin-left: 4px;
+  }
+
+  .finish-desc {
+    font-size: .9375rem;
+    color: rgba(255, 255, 255, .65);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .finish-features {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+  }
+
+  .finish-features li {
+    font-size: .9375rem;
+    color: rgba(255, 255, 255, .8);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .feat-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #A855F7, #EC4899);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .finish-btn { width: 100%; justify-content: center; }
+
+  @media (max-width: 640px) {
+    .finishes-grid { grid-template-columns: 1fr; }
+  }
+</style>

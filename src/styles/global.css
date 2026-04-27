@@ -1,0 +1,370 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Brand tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --purple:       #A855F7;
+  --pink:         #EC4899;
+  --purple-dark:  #5B21B6;
+  --bg-dark:      #1A0A2E;
+  --bg-mid:       #2D1057;
+
+  /* Cinematic easing — slight overshoot for premium feel */
+  --ease-spring:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-cinema:  cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Base reset ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-dark);
+  color: #fff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Gradient text utility ────────────────────────────────────────────────── */
+.text-gradient {
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Brand gradient background utility ───────────────────────────────────── */
+.bg-brand {
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 36px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, .35);
+  transition: transform .2s var(--ease-spring), box-shadow .2s var(--ease-spring);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 10px 36px rgba(168, 85, 247, .55);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(.985);
+  box-shadow: 0 4px 16px rgba(168, 85, 247, .4);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, .8);
+  outline-offset: 3px;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background .2s var(--ease-spring), border-color .2s var(--ease-spring), transform .2s var(--ease-spring);
+}
+
+.btn-secondary:hover {
+  background: rgba(168, 85, 247, .14);
+  border-color: rgba(168, 85, 247, .5);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+  background: rgba(168, 85, 247, .08);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid rgba(168, 85, 247, .8);
+  outline-offset: 3px;
+}
+
+/* ── Section scaffold ─────────────────────────────────────────────────────── */
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .6875rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #C084FC;
+  background: rgba(168, 85, 247, .1);
+  border: 1px solid rgba(168, 85, 247, .22);
+  border-radius: 50px;
+  padding: 5px 14px;
+  margin-bottom: 18px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.75rem, 5vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: clamp(.9375rem, 2vw, 1.125rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, .58);
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+.section-sub--center { margin: 0 auto; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CINEMATIC SCROLL REVEALS
+   Variants: reveal-up, reveal-left, reveal-right, reveal-scale
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Shared base for all reveal types */
+.reveal,
+.reveal-up,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+    opacity   0.9s var(--ease-cinema),
+    transform 0.9s var(--ease-cinema);
+}
+
+/* Per-type initial transforms */
+.reveal,
+.reveal-up   { transform: translateY(50px); }
+.reveal-left { transform: translateX(-70px); }
+.reveal-right{ transform: translateX(70px); }
+.reveal-scale{ transform: scale(0.88) translateY(30px); }
+
+/* Visible (animated-in) state */
+.reveal.visible,
+.reveal-up.visible,
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger delays */
+.delay-1 { transition-delay: 0.08s; }
+.delay-2 { transition-delay: 0.18s; }
+.delay-3 { transition-delay: 0.28s; }
+.delay-4 { transition-delay: 0.38s; }
+
+/* Legacy delay classes (backwards compat) */
+.reveal-delay-1 { transition-delay: .08s; }
+.reveal-delay-2 { transition-delay: .16s; }
+.reveal-delay-3 { transition-delay: .24s; }
+.reveal-delay-4 { transition-delay: .32s; }
+
+/* ── CSS ambient background ───────────────────────────────────────────────── */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 45% at 18% 18%, rgba(91, 33, 182, .2) 0%, transparent 68%),
+    radial-gradient(ellipse 45% 38% at 82% 82%, rgba(236, 72, 153, .12) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(26, 10, 46, 0) 0%, transparent 100%);
+  animation: ambient-drift 14s ease-in-out infinite alternate;
+}
+
+@keyframes ambient-drift {
+  0%   { opacity: .5; }
+  50%  { opacity: .85; }
+  100% { opacity: .6; }
+}
+
+/* ── Hero entrance animations ────────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s var(--ease-cinema) forwards;
+  opacity: 0;
+}
+
+/* ── 3D Tilt card ────────────────────────────────────────────────────────── */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease-out;
+}
+
+.tilt-card .tilt-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--shine-x, 50%) var(--shine-y, 50%),
+    rgba(255, 255, 255, .08) 0%,
+    transparent 60%
+  );
+  transition: opacity 0.3s ease;
+  z-index: 5;
+}
+
+.tilt-card:hover .tilt-shine {
+  opacity: 1;
+}
+
+.tilt-card .tilt-content {
+  transform: translateZ(20px);
+  transform-style: preserve-3d;
+}
+
+/* ── Card glass surface (Apple vibrancy) ──────────────────────────────────── */
+.glass-card {
+  position: relative;
+  background: rgba(45, 16, 87, .42);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 1.25rem;
+  transition: transform .4s var(--ease-cinema), border-color .3s var(--ease-spring), box-shadow .3s var(--ease-spring);
+}
+
+@media (hover: hover) {
+  .glass-card:not([data-tilt]):hover {
+    transform: translateY(-5px);
+    border-color: rgba(168, 85, 247, .38);
+    box-shadow: 0 16px 48px rgba(168, 85, 247, .14);
+  }
+}
+
+/* ── Price counter ───────────────────────────────────────────────────────── */
+.price-counter {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── WhatsApp float button ────────────────────────────────────────────────── */
+#wa-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, .45);
+  text-decoration: none;
+  animation: pulse-wa 2.8s ease-in-out infinite;
+  transition: transform .2s var(--ease-spring);
+}
+
+#wa-float:hover { transform: scale(1.08); }
+
+@keyframes pulse-wa {
+  0%, 100% { box-shadow: 0 6px 24px rgba(37, 211, 102, .45), 0 0 0 0 rgba(37, 211, 102, .28); }
+  50%       { box-shadow: 0 6px 24px rgba(37, 211, 102, .45), 0 0 0 12px rgba(37, 211, 102, 0); }
+}
+
+/* ── Section glow divider ────────────────────────────────────────────────── */
+.section-divider {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(168, 85, 247, .35) 30%,
+    rgba(236, 72, 153, .25) 70%,
+    transparent 100%
+  );
+  margin: 0;
+  overflow: visible;
+}
+
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 40px;
+  background: radial-gradient(ellipse at center,
+    rgba(168, 85, 247, .12) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .btn-primary, .btn-secondary { padding: 13px 26px; font-size: .9375rem; }
+
+  /* Reduce reveal distances on mobile */
+  .reveal, .reveal-up   { transform: translateY(30px); }
+  .reveal-left           { transform: translateX(-40px); }
+  .reveal-right          { transform: translateX(40px); }
+  .reveal-scale          { transform: scale(0.92) translateY(20px); }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,107 @@
+---
+import { STEPS } from '@/lib/site';
+---
+<section id="how" aria-labelledby="how-heading">
+  <div class="section-inner">
+    <div class="how-header">
+      <p class="section-tag">Cómo hacemos tu busto</p>
+      <h2 id="how-heading" class="section-title reveal reveal-delay-1">
+        De tu foto a <span class="text-gradient">tu busto impreso en 3D</span><br>en 4 pasos
+      </h2>
+    </div>
+
+    <ol class="steps-row" aria-label="Proceso de creación">
+      {STEPS.map((step, i) => (
+        <li class={`step-item reveal reveal-delay-${i + 1}`}>
+          <div class="step-num" aria-hidden="true">{step.emoji}</div>
+          <h3>{step.title}</h3>
+          <p>{step.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  #how {
+    padding: 6.25rem 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(91, 33, 182, .15), transparent);
+  }
+
+  .how-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    list-style: none;
+    position: relative;
+  }
+
+  /* Connecting line between steps */
+  .steps-row::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #A855F7, #EC4899, #A855F7, transparent);
+    opacity: .4;
+    pointer-events: none;
+  }
+
+  .step-item {
+    text-align: center;
+    padding: 0 1.25rem;
+  }
+
+  .step-num {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #A855F7, #EC4899);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 32px rgba(168, 85, 247, .4);
+    position: relative;
+    z-index: 1;
+    transition: transform .25s ease;
+  }
+
+  .step-item:hover .step-num { transform: scale(1.12); }
+
+  .step-item h3 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: .625rem;
+    color: #fff;
+  }
+
+  .step-item p {
+    font-size: .875rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, .55);
+    line-height: 1.75;
+  }
+
+  @media (max-width: 768px) {
+    .steps-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 0;
+    }
+    .steps-row::before { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .steps-row { grid-template-columns: 1fr; }
+  }
+</style>
