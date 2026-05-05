@@ -26,28 +26,26 @@ const FINISHES = [
 ] as const;
 
 const FONTS = [
-  { id: 'oswald',    label: 'Clásica',  family: "'Oswald', sans-serif",    weight: '700' },
-  { id: 'bebas',     label: 'Moderna',  family: "'Bebas Neue', sans-serif", weight: '400' },
-  { id: 'righteous', label: 'Especial', family: "'Righteous', sans-serif",  weight: '400' },
+  { id: 'oswald',    label: 'Clásica',  family: 'Oswald',     weight: '700', css: "'Oswald', sans-serif" },
+  { id: 'bebas',     label: 'Moderna',  family: 'Bebas Neue',  weight: '400', css: "'Bebas Neue', sans-serif" },
+  { id: 'righteous', label: 'Especial', family: 'Righteous',   weight: '400', css: "'Righteous', sans-serif" },
 ] as const;
 
+// baseImg: which photo template to use. overlay tints the white base for negro/marmol.
 const BASE_COLORS = [
-  { id: 'negro',  label: 'Negro',  hex: '#1a1a1a', bg: '#1a1a1a',                                                                                previewBg: '#1a1a1a' },
-  { id: 'blanco', label: 'Blanco', hex: '#f0f0f0', bg: '#f0f0f0',                                                                                previewBg: '#f0f0f0' },
-  { id: 'marmol', label: 'Mármol', hex: '#d6d0c8', bg: 'linear-gradient(135deg,#e8e4de 0%,#c9c3b8 30%,#ddd8d0 55%,#b8b0a5 80%,#d0cbc2 100%)',  previewBg: '#d0cbc2' },
-  { id: 'bronce', label: 'Bronce', hex: '#8b6914', bg: 'linear-gradient(135deg,#c8a84b 0%,#8b6914 35%,#b8962e 60%,#6b4f10 85%,#a07828 100%)',  previewBg: '#8b6914' },
+  { id: 'negro',  label: 'Negro',  baseImg: '/images/bases/base-blanca.jpeg', overlay: 'rgba(18,18,18,0.82)',  swatchBg: '#1c1c1c' },
+  { id: 'blanco', label: 'Blanco', baseImg: '/images/bases/base-blanca.jpeg', overlay: null,                  swatchBg: '#f0ede8' },
+  { id: 'marmol', label: 'Mármol', baseImg: '/images/bases/base-blanca.jpeg', overlay: 'rgba(185,178,168,0.45)', swatchBg: 'linear-gradient(135deg,#e8e4de,#c9c3b8,#ddd8d0,#b8b0a5)' },
+  { id: 'bronce', label: 'Bronce', baseImg: '/images/bases/base-bronce.jpeg', overlay: null,                  swatchBg: 'linear-gradient(135deg,#c8a84b,#8b6914,#b8962e)' },
 ] as const;
 
 const LETTER_COLORS = [
-  { id: 'dorado',   label: 'Dorado',   hex: '#d4af37', bg: 'linear-gradient(135deg,#f0d060 0%,#c8961e 50%,#e8c840 100%)' },
-  { id: 'plateado', label: 'Plateado', hex: '#c0c0c0', bg: 'linear-gradient(135deg,#e8e8e8 0%,#a0a0a0 50%,#d0d0d0 100%)' },
-  { id: 'blanco',   label: 'Blanco',   hex: '#f5f5f5', bg: '#f0f0f0' },
-  { id: 'negro',    label: 'Negro',    hex: '#1a1a1a', bg: '#1a1a1a' },
-  { id: 'bronce',   label: 'Bronce',   hex: '#c8a84b', bg: 'linear-gradient(135deg,#c8a84b 0%,#8b6914 50%,#b8962e 100%)' },
+  { id: 'dorado',   label: 'Dorado',   hex: '#d4af37', swatchBg: 'linear-gradient(135deg,#f0d060,#c8961e,#e8c840)' },
+  { id: 'plateado', label: 'Plateado', hex: '#d0d0d0', swatchBg: 'linear-gradient(135deg,#e8e8e8,#a0a0a0,#d0d0d0)' },
+  { id: 'blanco',   label: 'Blanco',   hex: '#f5f5f5', swatchBg: '#f0f0f0' },
+  { id: 'negro',    label: 'Negro',    hex: '#111111', swatchBg: '#1a1a1a' },
+  { id: 'bronce',   label: 'Bronce',   hex: '#c8a84b', swatchBg: 'linear-gradient(135deg,#c8a84b,#8b6914,#b8962e)' },
 ] as const;
-
-// Flatten all photos with their finish id for JS
-const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishId: f.id, idx: i })));
 ---
 
 <section id="configurador" class="py-28 px-6 relative z-10">
@@ -65,53 +63,54 @@ const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishI
 
     <div class="cfg-layout reveal-scale">
 
-      <!-- LEFT: product photo -->
+      <!-- LEFT: two canvases stacked — product photo on top, base below -->
       <div class="cfg-photo-col">
-        <div class="cfg-photo-frame">
-          <!-- All photos stacked, JS shows the active one -->
-          {ALL_PHOTOS.map((photo, i) => (
+
+        <!-- Product photo -->
+        <div class="cfg-product-wrap">
+          {FINISHES.flatMap(f => f.photos).map((photo, i) => (
             <img
               src={photo.src}
               alt={photo.alt}
               loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
               class="cfg-product-img"
-              data-finish={photo.finishId}
-              data-photo-idx={photo.idx}
-              style={i === 0 ? 'opacity:1; position:relative;' : 'opacity:0; position:absolute; inset:0;'}
+              data-finish={FINISHES.find(f => f.photos.some(p => p.src === photo.src))?.id}
+              data-photo-idx={FINISHES.find(f => f.photos.some(p => p.src === photo.src))?.photos.indexOf(photo)}
             />
           ))}
-          <!-- Base preview bar at bottom of photo -->
-          <div class="cfg-base-bar" id="cfg-base-bar">
-            <span class="cfg-base-text" id="cfg-base-text">MORFEO</span>
+          <div class="cfg-photo-nav" id="cfg-photo-nav"></div>
+        </div>
+
+        <!-- Base canvas -->
+        <div class="cfg-base-wrap">
+          <canvas
+            id="cfg-canvas"
+            width="900"
+            height="420"
+            aria-label="Vista previa de la base personalizada"
+          ></canvas>
+          <div class="cfg-canvas-loading" id="cfg-loading">
+            <div class="cfg-spinner"></div>
           </div>
         </div>
-        <!-- Photo nav dots for multi-photo finishes -->
-        <div class="cfg-photo-nav" id="cfg-photo-nav">
-          {FINISHES[0].photos.map((_, i) => (
-            <button class={`cfg-dot ${i === 0 ? 'cfg-dot--active' : ''}`} data-dot={i} aria-label={`Foto ${i + 1}`}></button>
-          ))}
-        </div>
+
+        <p class="text-white/25 text-xs text-center px-4">
+          Vista previa de referencia — el acabado final puede variar
+        </p>
       </div>
 
       <!-- RIGHT: controls -->
       <div class="cfg-controls glass-card p-8">
         <div class="tilt-shine"></div>
 
-        <!-- Paso 1: Acabado -->
+        <!-- 1: Acabado -->
         <div class="config-step">
           <p class="step-label">1 — Elige el acabado</p>
           <div class="finish-options">
             {FINISHES.map((f, i) => (
-              <label class="finish-option" data-finish-id={f.id} data-photo-count={f.photos.length}>
-                <input
-                  type="radio"
-                  name="cfg-finish"
-                  value={f.id}
-                  data-label={f.label}
-                  checked={i === 0}
-                  class="sr-only"
-                />
+              <label class="finish-option">
+                <input type="radio" name="cfg-finish" value={f.id} data-label={f.label} checked={i === 0} class="sr-only" />
                 <span class="finish-option-name">{f.label}</span>
                 <span class="finish-option-sub">{f.sub}</span>
               </label>
@@ -119,80 +118,54 @@ const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishI
           </div>
         </div>
 
-        <!-- Paso 2: Nombre -->
+        <!-- 2: Nombre -->
         <div class="config-step">
           <p class="step-label">2 — Nombre de tu mascota</p>
-          <input
-            id="cfg-name"
-            type="text"
-            maxlength="20"
-            placeholder="Ej: Morfeo"
-            class="cfg-input"
-            autocomplete="off"
-          />
+          <input id="cfg-name" type="text" maxlength="16" placeholder="Ej: Morfeo" class="cfg-input" autocomplete="off" />
         </div>
 
-        <!-- Paso 3: Fuente -->
+        <!-- 3: Fuente -->
         <div class="config-step">
           <p class="step-label">3 — Estilo de letra</p>
           <div class="font-options">
             {FONTS.map((font, i) => (
-              <label class="font-option" data-font-family={font.family} data-font-weight={font.weight}>
-                <input
-                  type="radio"
-                  name="cfg-font"
-                  value={font.id}
-                  checked={i === 0}
-                  class="sr-only"
-                />
+              <label class="font-option" data-font-family={font.family} data-font-weight={font.weight} data-font-label={font.label}>
+                <input type="radio" name="cfg-font" value={font.id} checked={i === 0} class="sr-only" />
                 <span class="font-option-label">{font.label}</span>
-                <span class="font-preview" style={`font-family: ${font.family}; font-weight: ${font.weight};`}>
-                  Mascota
-                </span>
+                <span class="font-preview" style={`font-family: ${font.css}; font-weight: ${font.weight};`}>Mascota</span>
               </label>
             ))}
           </div>
         </div>
 
-        <!-- Paso 4: Color base -->
+        <!-- 4: Color base -->
         <div class="config-step">
           <p class="step-label">4 — Color de la base</p>
           <div class="color-options">
             {BASE_COLORS.map((color, i) => (
               <label class="color-swatch-wrap" title={color.label}>
                 <input
-                  type="radio"
-                  name="cfg-base"
-                  value={color.id}
+                  type="radio" name="cfg-base" value={color.id}
                   data-label={color.label}
-                  data-hex={color.hex}
-                  data-preview={color.previewBg}
-                  checked={i === 0}
-                  class="sr-only"
+                  data-base-img={color.baseImg}
+                  data-overlay={color.overlay ?? ''}
+                  checked={i === 0} class="sr-only"
                 />
-                <span class="color-swatch" style={`background: ${color.bg};`} aria-label={color.label}></span>
+                <span class="color-swatch" style={`background: ${color.swatchBg};`} aria-label={color.label}></span>
                 <span class="swatch-label">{color.label}</span>
               </label>
             ))}
           </div>
         </div>
 
-        <!-- Paso 5: Color letras -->
+        <!-- 5: Color letras -->
         <div class="config-step">
           <p class="step-label">5 — Color de las letras</p>
           <div class="color-options">
             {LETTER_COLORS.map((color, i) => (
               <label class="color-swatch-wrap" title={color.label}>
-                <input
-                  type="radio"
-                  name="cfg-letters"
-                  value={color.id}
-                  data-label={color.label}
-                  data-hex={color.hex}
-                  checked={i === 0}
-                  class="sr-only"
-                />
-                <span class="color-swatch" style={`background: ${color.bg};`} aria-label={color.label}></span>
+                <input type="radio" name="cfg-letters" value={color.id} data-label={color.label} data-hex={color.hex} checked={i === 0} class="sr-only" />
+                <span class="color-swatch" style={`background: ${color.swatchBg};`} aria-label={color.label}></span>
                 <span class="swatch-label">{color.label}</span>
               </label>
             ))}
@@ -200,25 +173,16 @@ const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishI
         </div>
 
         <!-- CTA -->
-        <a
-          id="cfg-wa-btn"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-primary w-full text-center mt-6 block"
-        >
+        <a id="cfg-wa-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary w-full text-center mt-6 block">
           Enviar mi diseño por WhatsApp
         </a>
-        <p class="text-white/30 text-xs text-center mt-3">
-          Respondemos en menos de 2 horas en horario hábil
-        </p>
+        <p class="text-white/30 text-xs text-center mt-3">Respondemos en menos de 2 horas en horario hábil</p>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  /* Layout */
   .cfg-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -238,70 +202,94 @@ const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishI
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0;
     position: sticky;
     top: 5rem;
   }
 
-  .cfg-photo-frame {
+  /* Product photo stack */
+  .cfg-product-wrap {
     position: relative;
     width: 100%;
     max-width: 420px;
-    border-radius: 1.5rem;
+    border-radius: 1.25rem 1.25rem 0 0;
     overflow: hidden;
-    background: rgba(42, 22, 96, 0.5);
-    box-shadow:
-      0 0 0 1px rgba(155, 127, 212, 0.18),
-      0 24px 64px rgba(0, 0, 0, 0.5),
-      0 8px 32px rgba(155, 127, 212, 0.15);
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 3 / 3.2;
+    background: rgba(42, 22, 96, 0.4);
+    box-shadow: 0 0 0 1px rgba(155,127,212,0.15), 0 -4px 32px rgba(0,0,0,0.4);
   }
 
   .cfg-product-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
-    display: block;
-    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0;
+    transition: opacity 0.45s cubic-bezier(0.22,1,0.36,1);
   }
 
-  /* Base preview bar overlaid at the bottom of the photo */
-  .cfg-base-bar {
+  .cfg-product-img.active {
+    opacity: 1;
+    position: relative;
+  }
+
+  /* Base canvas */
+  .cfg-base-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 0 0 1.25rem 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(155,127,212,0.15), 0 16px 48px rgba(0,0,0,0.55);
+  }
+
+  #cfg-canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .cfg-canvas-loading {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 72px;
-    background: #1a1a1a;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.35s;
+    background: rgba(28,16,48,0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
   }
 
-  .cfg-base-text {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
-    font-size: clamp(1.5rem, 5vw, 2.25rem);
-    color: #d4af37;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    transition: color 0.3s, font-family 0.15s, font-weight 0.15s;
+  .cfg-canvas-loading.visible { opacity: 1; pointer-events: auto; }
+
+  .cfg-spinner {
+    width: 28px; height: 28px;
+    border: 3px solid rgba(155,127,212,0.3);
+    border-top-color: #9B7FD4;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
   }
 
-  /* Photo nav dots */
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Photo nav dots — inside product wrap */
   .cfg-photo-nav {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    gap: 8px;
-    min-height: 12px;
+    gap: 7px;
+    z-index: 10;
   }
 
   .cfg-dot {
-    width: 8px;
-    height: 8px;
+    width: 7px; height: 7px;
     border-radius: 50%;
-    background: rgba(155, 127, 212, 0.3);
+    background: rgba(255,255,255,0.4);
     border: none;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
@@ -309,30 +297,25 @@ const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishI
   }
 
   .cfg-dot--active {
-    background: #9B7FD4;
-    transform: scale(1.3);
+    background: #fff;
+    transform: scale(1.35);
   }
 
-  /* Controls card */
-  .cfg-controls {
-    position: relative;
-  }
+  /* Controls */
+  .cfg-controls { position: relative; }
 
-  .config-step {
-    margin-bottom: 1.75rem;
-  }
+  .config-step { margin-bottom: 1.75rem; }
 
   .step-label {
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(155, 127, 212, 0.8);
+    color: rgba(155,127,212,0.8);
     margin-bottom: 0.75rem;
     display: block;
   }
 
-  /* Finish selector */
   .finish-options {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -340,129 +323,71 @@ const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishI
   }
 
   .finish-option {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: flex; flex-direction: column; gap: 4px;
     padding: 0.875rem 1rem;
     border-radius: 0.875rem;
-    border: 1px solid rgba(155, 127, 212, 0.2);
-    background: rgba(28, 16, 48, 0.5);
+    border: 1px solid rgba(155,127,212,0.2);
+    background: rgba(28,16,48,0.5);
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
   }
 
-  .finish-option:hover {
-    border-color: rgba(155, 127, 212, 0.45);
-    background: rgba(42, 22, 96, 0.4);
-  }
+  .finish-option:hover { border-color: rgba(155,127,212,0.45); background: rgba(42,22,96,0.4); }
 
   .finish-option:has(input:checked) {
     border-color: #9B7FD4;
-    background: rgba(155, 127, 212, 0.15);
-    box-shadow: 0 0 0 1px rgba(155, 127, 212, 0.25);
+    background: rgba(155,127,212,0.15);
+    box-shadow: 0 0 0 1px rgba(155,127,212,0.25);
   }
 
-  .finish-option-name {
-    font-size: 0.9375rem;
-    font-weight: 700;
-    color: #fff;
-    font-family: 'Playfair Display', Georgia, serif;
-  }
+  .finish-option-name { font-size: 0.9375rem; font-weight: 700; color: #fff; font-family: 'Playfair Display', Georgia, serif; }
+  .finish-option-sub  { font-size: 0.6875rem; color: rgba(192,132,252,0.7); }
 
-  .finish-option-sub {
-    font-size: 0.6875rem;
-    color: rgba(192, 132, 252, 0.7);
-  }
-
-  /* Name input */
   .cfg-input {
     width: 100%;
-    background: rgba(28, 16, 48, 0.6);
-    border: 1px solid rgba(155, 127, 212, 0.25);
+    background: rgba(28,16,48,0.6);
+    border: 1px solid rgba(155,127,212,0.25);
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
-    font-size: 1rem;
-    color: #fff;
+    font-size: 1rem; color: #fff;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     font-family: inherit;
   }
 
   .cfg-input::placeholder { color: rgba(255,255,255,0.2); }
+  .cfg-input:focus { border-color: rgba(155,127,212,0.6); box-shadow: 0 0 0 3px rgba(155,127,212,0.12); }
 
-  .cfg-input:focus {
-    border-color: rgba(155, 127, 212, 0.6);
-    box-shadow: 0 0 0 3px rgba(155, 127, 212, 0.12);
-  }
-
-  /* Font selector */
-  .font-options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
+  .font-options { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
 
   .font-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
     padding: 0.75rem 0.5rem;
     border-radius: 0.75rem;
-    border: 1px solid rgba(155, 127, 212, 0.2);
-    background: rgba(28, 16, 48, 0.5);
+    border: 1px solid rgba(155,127,212,0.2);
+    background: rgba(28,16,48,0.5);
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
   }
 
-  .font-option:hover {
-    border-color: rgba(155, 127, 212, 0.45);
-    background: rgba(42, 22, 96, 0.4);
-  }
+  .font-option:hover { border-color: rgba(155,127,212,0.45); background: rgba(42,22,96,0.4); }
 
   .font-option:has(input:checked) {
     border-color: #9B7FD4;
-    background: rgba(155, 127, 212, 0.15);
-    box-shadow: 0 0 0 1px rgba(155, 127, 212, 0.25);
+    background: rgba(155,127,212,0.15);
+    box-shadow: 0 0 0 1px rgba(155,127,212,0.25);
   }
 
-  .font-option-label {
-    font-size: 0.625rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-  }
+  .font-option-label { font-size: 0.625rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .font-option:has(input:checked) .font-option-label { color: rgba(192,132,252,0.9); }
+  .font-preview { font-size: 1.25rem; color: #fff; line-height: 1; }
 
-  .font-option:has(input:checked) .font-option-label {
-    color: rgba(192, 132, 252, 0.9);
-  }
+  .color-options { display: flex; gap: 12px; flex-wrap: wrap; }
 
-  .font-preview {
-    font-size: 1.25rem;
-    color: #fff;
-    line-height: 1;
-  }
-
-  /* Color swatches */
-  .color-options {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .color-swatch-wrap {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-  }
+  .color-swatch-wrap { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; }
 
   .color-swatch {
-    display: block;
-    width: 38px;
-    height: 38px;
+    display: block; width: 38px; height: 38px;
     border-radius: 50%;
     border: 2px solid rgba(255,255,255,0.1);
     transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
@@ -477,171 +402,241 @@ const ALL_PHOTOS = FINISHES.flatMap(f => f.photos.map((p, i) => ({ ...p, finishI
     transform: scale(1.12);
   }
 
-  .swatch-label {
-    font-size: 0.5625rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-    transition: color 0.15s;
-  }
-
-  .color-swatch-wrap:has(input:checked) .swatch-label {
-    color: rgba(192, 132, 252, 0.9);
-  }
+  .swatch-label { font-size: 0.5625rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.3); transition: color 0.15s; }
+  .color-swatch-wrap:has(input:checked) .swatch-label { color: rgba(192,132,252,0.9); }
 
   @media (max-width: 480px) {
-    .finish-options { grid-template-columns: 1fr 1fr; }
-    .font-options { gap: 6px; }
     .font-preview { font-size: 1.1rem; }
   }
 </style>
 
-<script define:vars={{ WA_BASE }}>
-  (function () {
-    const nameInput  = document.getElementById('cfg-name');
-    const baseBar    = document.getElementById('cfg-base-bar');
-    const baseText   = document.getElementById('cfg-base-text');
-    const photoNav   = document.getElementById('cfg-photo-nav');
-    const waBtn      = document.getElementById('cfg-wa-btn');
-    const allImgs    = document.querySelectorAll('.cfg-product-img');
+<script define:vars={{ WA_BASE, FINISHES, FONTS }}>
+(function () {
+  const canvas    = document.getElementById('cfg-canvas');
+  const loading   = document.getElementById('cfg-loading');
+  const nameInput = document.getElementById('cfg-name');
+  const photoNav  = document.getElementById('cfg-photo-nav');
+  const waBtn     = document.getElementById('cfg-wa-btn');
 
-    if (!nameInput || !baseBar || !baseText || !waBtn) return;
+  if (!canvas || !nameInput || !waBtn) return;
 
-    let state = {
-      finish:      'escultorico',
-      finishLabel: 'Escultórico',
-      photoIdx:    0,
-      name:        '',
-      fontFamily:  "'Oswald', sans-serif",
-      fontWeight:  '700',
-      fontLabel:   'Clásica (Oswald)',
-      baseColor:   '#1a1a1a',
-      baseLabel:   'Negro',
-      letterColor: '#d4af37',
-      letterLabel: 'Dorado',
-    };
+  const ctx = canvas.getContext('2d');
+  const CW  = canvas.width;   // 900
+  const CH  = canvas.height;  // 420
 
-    // --- Photo switching ---
-    function getImgsForFinish(finishId) {
-      return [...allImgs].filter(img => img.dataset.finish === finishId);
+  // Pre-load base images
+  const baseImgCache = {};
+  function loadImg(src) {
+    if (!baseImgCache[src]) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = src;
+      baseImgCache[src] = img;
     }
+    return baseImgCache[src];
+  }
 
-    function showPhoto(finishId, idx) {
-      allImgs.forEach(img => {
-        img.style.opacity = '0';
-        img.style.position = 'absolute';
-        img.style.inset = '0';
+  // Pre-load all base images
+  ['/images/bases/base-blanca.jpeg', '/images/bases/base-bronce.jpeg'].forEach(loadImg);
+
+  // State
+  let state = {
+    finish:       FINISHES[0].id,
+    finishLabel:  FINISHES[0].label,
+    photoIdx:     0,
+    name:         '',
+    fontFamily:   'Oswald',
+    fontWeight:   '700',
+    fontLabel:    'Clásica (Oswald)',
+    baseImg:      '/images/bases/base-blanca.jpeg',
+    baseOverlay:  'rgba(18,18,18,0.82)',
+    baseLabel:    'Negro',
+    letterHex:    '#d4af37',
+    letterLabel:  'Dorado',
+  };
+
+  // ── Product photo switching ──
+  const allProductImgs = document.querySelectorAll('.cfg-product-img');
+
+  function showProductPhoto(finishId, idx) {
+    allProductImgs.forEach(img => img.classList.remove('active'));
+    const matches = [...allProductImgs].filter(img => img.dataset.finish === finishId);
+    const target  = matches[idx] || matches[0];
+    if (target) target.classList.add('active');
+  }
+
+  function updateDots() {
+    if (!photoNav) return;
+    const finish = FINISHES.find(f => f.id === state.finish);
+    const count  = finish?.photos.length ?? 1;
+    photoNav.innerHTML = '';
+    if (count <= 1) return;
+    for (let i = 0; i < count; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'cfg-dot' + (i === state.photoIdx ? ' cfg-dot--active' : '');
+      btn.setAttribute('aria-label', `Foto ${i + 1}`);
+      btn.addEventListener('click', () => {
+        state.photoIdx = i;
+        showProductPhoto(state.finish, i);
+        updateDots();
       });
-      const imgs = getImgsForFinish(finishId);
-      const target = imgs[idx] || imgs[0];
-      if (target) {
-        target.style.opacity = '1';
-        target.style.position = 'relative';
+      photoNav.appendChild(btn);
+    }
+  }
+
+  // ── Canvas: draw base with real photo + overlay + text ──
+  function drawCanvas() {
+    const imgEl = baseImgCache[state.baseImg];
+    ctx.clearRect(0, 0, CW, CH);
+
+    function renderText() {
+      const name = (state.name.trim() || 'TU MASCOTA').toUpperCase();
+
+      // Text zone: roughly center-front of the cylinder
+      // The base photo shows a cylinder: text area is roughly middle horizontal band
+      const textY  = CH * 0.52;   // vertical center of the front face
+      const maxW   = CW * 0.72;   // don't go edge-to-edge (cylinder curves away)
+
+      // Find fitting font size
+      let fontSize = Math.round(CH * 0.44);
+      ctx.font = `${state.fontWeight} ${fontSize}px '${state.fontFamily}', sans-serif`;
+      while (ctx.measureText(name).width > maxW && fontSize > 16) {
+        fontSize -= 1;
+        ctx.font = `${state.fontWeight} ${fontSize}px '${state.fontFamily}', sans-serif`;
       }
+
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Shadow for 3D raised-letter feel
+      ctx.shadowColor   = 'rgba(0,0,0,0.65)';
+      ctx.shadowBlur    = 5;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 3;
+      ctx.fillStyle     = state.letterHex;
+      ctx.fillText(name, CW / 2, textY);
+
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur  = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
     }
 
-    function updateDots(finishId, activeIdx) {
-      if (!photoNav) return;
-      const imgs = getImgsForFinish(finishId);
-      photoNav.innerHTML = '';
-      if (imgs.length <= 1) return;
-      imgs.forEach((_, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'cfg-dot' + (i === activeIdx ? ' cfg-dot--active' : '');
-        btn.setAttribute('data-dot', String(i));
-        btn.setAttribute('aria-label', `Foto ${i + 1}`);
-        btn.addEventListener('click', () => {
-          state.photoIdx = i;
-          showPhoto(state.finish, i);
-          updateDots(state.finish, i);
-        });
-        photoNav.appendChild(btn);
-      });
+    if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
+      // Draw base photo cover-fit
+      const scale = Math.max(CW / imgEl.naturalWidth, CH / imgEl.naturalHeight);
+      const sw = imgEl.naturalWidth  * scale;
+      const sh = imgEl.naturalHeight * scale;
+      const sx = (CW - sw) / 2;
+      const sy = (CH - sh) / 2;
+      ctx.drawImage(imgEl, sx, sy, sw, sh);
+
+      // Apply color overlay (for negro, marmol)
+      if (state.baseOverlay) {
+        ctx.fillStyle = state.baseOverlay;
+        ctx.fillRect(0, 0, CW, CH);
+      }
+
+      renderText();
+    } else {
+      // Fallback solid while loading
+      ctx.fillStyle = '#2a1660';
+      ctx.fillRect(0, 0, CW, CH);
+      renderText();
+      // Retry when loaded
+      if (imgEl) imgEl.onload = () => drawCanvas();
     }
+  }
 
-    // --- Text preview ---
-    function updatePreview() {
-      const display = state.name.trim() || 'TU MASCOTA';
-      baseText.textContent = display.toUpperCase();
-      baseText.style.fontFamily  = state.fontFamily;
-      baseText.style.fontWeight  = state.fontWeight;
-      baseText.style.color       = state.letterColor;
-      baseBar.style.background   = state.baseColor;
-    }
+  // ── WhatsApp link ──
+  function syncWA() {
+    const name = state.name.trim() || '(sin nombre)';
+    const msg  =
+      `Hola! Quiero cotizar un busto 3D con estas preferencias 🐾\n\n` +
+      `• Acabado: ${state.finishLabel}\n` +
+      `• Nombre en la base: ${name}\n` +
+      `• Fuente: ${state.fontLabel}\n` +
+      `• Color base: ${state.baseLabel}\n` +
+      `• Color letras: ${state.letterLabel}\n\n` +
+      `Adjunto las fotos de mi mascota a continuación.`;
+    waBtn.setAttribute('href', `${WA_BASE}?text=${encodeURIComponent(msg)}`);
+  }
 
-    // --- WhatsApp link ---
-    function buildWALink() {
-      const name = state.name.trim() || '(sin nombre)';
-      const msg =
-        `Hola! Quiero cotizar un busto 3D con estas preferencias 🐾\n\n` +
-        `• Acabado: ${state.finishLabel}\n` +
-        `• Nombre en la base: ${name}\n` +
-        `• Fuente: ${state.fontLabel}\n` +
-        `• Color base: ${state.baseLabel}\n` +
-        `• Color letras: ${state.letterLabel}\n\n` +
-        `Adjunto las fotos de mi mascota a continuación.`;
-      return `${WA_BASE}?text=${encodeURIComponent(msg)}`;
-    }
-
-    function sync() {
-      updatePreview();
-      waBtn.setAttribute('href', buildWALink());
-    }
-
-    // --- Finish selection ---
-    document.querySelectorAll('input[name="cfg-finish"]').forEach(radio => {
-      radio.addEventListener('change', e => {
-        state.finish      = e.target.value;
-        state.finishLabel = e.target.dataset.label || e.target.value;
-        state.photoIdx    = 0;
-        showPhoto(state.finish, 0);
-        updateDots(state.finish, 0);
-        sync();
-      });
+  // ── Events ──
+  document.querySelectorAll('input[name="cfg-finish"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+      state.finish      = e.target.value;
+      state.finishLabel = e.target.dataset.label || e.target.value;
+      state.photoIdx    = 0;
+      showProductPhoto(state.finish, 0);
+      updateDots();
+      syncWA();
     });
+  });
 
-    // --- Name ---
-    nameInput.addEventListener('input', () => {
-      state.name = nameInput.value;
-      sync();
+  nameInput.addEventListener('input', () => {
+    state.name = nameInput.value;
+    drawCanvas();
+    syncWA();
+  });
+
+  document.querySelectorAll('input[name="cfg-font"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+      const lbl = e.target.closest('label');
+      if (!lbl) return;
+      state.fontFamily = lbl.dataset.fontFamily;
+      state.fontWeight = lbl.dataset.fontWeight;
+      state.fontLabel  = `${lbl.dataset.fontLabel || ''} (${state.fontFamily})`;
+      drawCanvas();
+      syncWA();
     });
+  });
 
-    // --- Font ---
-    document.querySelectorAll('input[name="cfg-font"]').forEach(radio => {
-      radio.addEventListener('change', e => {
-        const lbl = e.target.closest('label');
-        if (!lbl) return;
-        state.fontFamily = lbl.dataset.fontFamily;
-        state.fontWeight = lbl.dataset.fontWeight;
-        const styleName  = lbl.querySelector('.font-option-label')?.textContent?.trim() || '';
-        const fontName   = lbl.querySelector('.font-preview')?.style?.fontFamily?.replace(/['"]/g,'').split(',')[0]?.trim() || '';
-        state.fontLabel  = `${styleName} (${fontName})`;
-        sync();
-      });
+  document.querySelectorAll('input[name="cfg-base"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+      state.baseLabel   = e.target.dataset.label   || e.target.value;
+      state.baseImg     = e.target.dataset.baseImg  || '/images/bases/base-blanca.jpeg';
+      state.baseOverlay = e.target.dataset.overlay  || '';
+      // Ensure image is loaded
+      const img = loadImg(state.baseImg);
+      if (!img.complete) {
+        if (loading) loading.classList.add('visible');
+        img.onload = () => { drawCanvas(); if (loading) loading.classList.remove('visible'); };
+      } else {
+        drawCanvas();
+      }
+      syncWA();
     });
+  });
 
-    // --- Base color ---
-    document.querySelectorAll('input[name="cfg-base"]').forEach(radio => {
-      radio.addEventListener('change', e => {
-        state.baseLabel = e.target.dataset.label || e.target.value;
-        state.baseColor = e.target.dataset.preview || e.target.dataset.hex || '#1a1a1a';
-        sync();
-      });
+  document.querySelectorAll('input[name="cfg-letters"]').forEach(radio => {
+    radio.addEventListener('change', e => {
+      state.letterLabel = e.target.dataset.label || e.target.value;
+      state.letterHex   = e.target.dataset.hex   || '#d4af37';
+      drawCanvas();
+      syncWA();
     });
+  });
 
-    // --- Letter color ---
-    document.querySelectorAll('input[name="cfg-letters"]').forEach(radio => {
-      radio.addEventListener('change', e => {
-        state.letterLabel = e.target.dataset.label || e.target.value;
-        state.letterColor = e.target.dataset.hex || '#d4af37';
-        sync();
-      });
-    });
+  // ── Boot ──
+  function boot() {
+    // Set first product photo active
+    showProductPhoto(state.finish, 0);
+    updateDots();
+    drawCanvas();
+    syncWA();
+    if (loading) loading.classList.remove('visible');
+  }
 
-    // Initial render
-    showPhoto(state.finish, 0);
-    updateDots(state.finish, 0);
-    sync();
-  })();
+  if (loading) loading.classList.add('visible');
+
+  // Wait for fonts + first base image
+  const firstBase = baseImgCache[state.baseImg];
+  const fontReady = document.fonts?.ready ?? Promise.resolve();
+  Promise.all([
+    fontReady,
+    firstBase?.complete ? Promise.resolve() : new Promise(r => { firstBase.onload = r; firstBase.onerror = r; }),
+  ]).then(boot);
+})();
 </script>
