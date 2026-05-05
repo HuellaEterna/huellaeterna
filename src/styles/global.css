@@ -4,11 +4,11 @@
 
 /* ── Brand tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --purple:       #A855F7;
-  --pink:         #EC4899;
-  --purple-dark:  #5B21B6;
-  --bg-dark:      #1A0A2E;
-  --bg-mid:       #2D1057;
+  --purple:       #9B7FD4;
+  --pink:         #C084FC;
+  --purple-dark:  #6B4FA8;
+  --bg-dark:      #1C1030;
+  --bg-mid:       #2A1660;
 
   /* Cinematic easing — slight overshoot for premium feel */
   --ease-spring:  cubic-bezier(0.4, 0, 0.2, 1);

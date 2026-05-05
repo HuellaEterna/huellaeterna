@@ -4,17 +4,13 @@ import { SITE, WA } from '@/lib/site';
 <header>
   <nav id="site-nav" aria-label="Navegación principal">
     <a href="/" class="nav-logo" aria-label={SITE.name}>
-      <!-- SVG paw logo placeholder -->
-      <svg width="38" height="38" viewBox="0 0 38 38" fill="none" aria-hidden="true">
-        <circle cx="19" cy="19" r="19" fill="url(#navGrad)" opacity=".9"/>
-        <text x="19" y="25" text-anchor="middle" font-size="18" fill="white">🐾</text>
-        <defs>
-          <linearGradient id="navGrad" x1="0" y1="0" x2="38" y2="38">
-            <stop offset="0%"   stop-color="#A855F7"/>
-            <stop offset="100%" stop-color="#EC4899"/>
-          </linearGradient>
-        </defs>
-      </svg>
+      <img
+        src="/images/busto-3d-mascota-huella-eterna-logo-bogota.jpeg"
+        alt="Huella Eterna — Bustos 3D Colombia"
+        width="38"
+        height="38"
+        class="nav-logo-img"
+      />
       <span class="nav-brand">{SITE.name}</span>
     </a>
 
@@ -50,6 +46,14 @@ import { SITE, WA } from '@/lib/site';
     text-decoration: none;
   }
 
+  .nav-logo-img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
   .nav-brand {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.1875rem;
@@ -59,7 +63,7 @@ import { SITE, WA } from '@/lib/site';
   }
 
   .nav-cta {
-    background: linear-gradient(135deg, #A855F7, #EC4899);
+    background: linear-gradient(135deg, #9B7FD4, #C084FC);
     color: #fff;
     border: none;
     border-radius: 50px;
@@ -69,13 +73,13 @@ import { SITE, WA } from '@/lib/site';
     font-weight: 600;
     letter-spacing: -0.01em;
     text-decoration: none;
-    box-shadow: 0 3px 14px rgba(168, 85, 247, .35);
+    box-shadow: 0 3px 14px rgba(155, 127, 212, .35);
     transition: transform .2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow .2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .nav-cta:hover {
     transform: translateY(-1px) scale(1.02);
-    box-shadow: 0 6px 22px rgba(168, 85, 247, .55);
+    box-shadow: 0 6px 22px rgba(155, 127, 212, .55);
   }
 
   @media (max-width: 480px) {

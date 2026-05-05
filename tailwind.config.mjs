@@ -5,17 +5,17 @@ export default {
     extend: {
       colors: {
         purple: {
-          DEFAULT: '#A855F7',
-          dark:    '#5B21B6',
-          text:    '#7C3AED',
-          mid:     '#2D1057',
+          DEFAULT: '#9B7FD4',
+          dark:    '#6B4FA8',
+          text:    '#9B7FD4',
+          mid:     '#2A1660',
         },
         pink: {
-          DEFAULT: '#EC4899',
+          DEFAULT: '#C084FC',
         },
         bg: {
-          dark: '#1A0A2E',
-          mid:  '#2D1057',
+          dark: '#1C1030',
+          mid:  '#2A1660',
         },
       },
       fontFamily: {
@@ -23,7 +23,7 @@ export default {
         sans:  ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #A855F7, #EC4899)',
+        'brand-gradient': 'linear-gradient(135deg, #9B7FD4, #C084FC)',
       },
     },
   },

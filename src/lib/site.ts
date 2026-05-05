@@ -1,7 +1,7 @@
 // ─── Business constants ───────────────────────────────────────────────────────
 export const SITE = {
   name:        'Huella Eterna',
-  tagline:     'Un tributo a la altura de su amor.',
+  tagline:     'El busto personalizado que inmortalizará a tu mascota.',
   description: 'Bustos impresos en 3D en Bogotá: esculturas 3D personalizadas de mascotas pintadas a mano. Impresión 3D de alta resolución con acabados artísticos premium. 20cm de pura emoción. Envíos a toda Colombia.',
   keywords:    'bustos impresos en 3D Bogotá, impresión 3D mascotas Colombia, bustos 3D mascotas personalizados, figura 3D mascota Bogotá, busto mascota impresión 3D Colombia, memorial mascotas Bogotá impresión 3D, regalo impresión 3D mascota Colombia, escultura 3D mascota pintada a mano, Huella Eterna Bogotá',
   url:         'https://huellaeterna.co',
